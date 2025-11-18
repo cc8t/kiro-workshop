@@ -1,0 +1,28 @@
+digraph "AWS Architecture with Labeled Connections" {
+	graph [fontcolor="#2D3436" fontname="Sans-Serif" fontsize=15 label="AWS Architecture with Labeled Connections" nodesep=0.60 pad=2.0 rankdir=LR ranksep=0.75 splines=ortho]
+	node [fixedsize=true fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 height=1.4 imagescale=true labelloc=b shape=box style=rounded width=1.4]
+	edge [color="#7B8894"]
+	"36ff9b4b8ebc4b7eb7646f13e37dc94e" [label="Route 53" height=1.9 image="/home/participant/.cache/uv/archive-v0/kyWXeySPhS8ybWVjJsSml/lib/python3.12/site-packages/resources/aws/network/route-53.png" shape=none]
+	"59990377393e4f32a93fa2d32ef80aa0" [label=CDN height=1.9 image="/home/participant/.cache/uv/archive-v0/kyWXeySPhS8ybWVjJsSml/lib/python3.12/site-packages/resources/aws/network/cloudfront.png" shape=none]
+	ea668ef8e5ee4bb596250f6d66b79a92 [label="S3 Static" height=1.9 image="/home/participant/.cache/uv/archive-v0/kyWXeySPhS8ybWVjJsSml/lib/python3.12/site-packages/resources/aws/storage/simple-storage-service-s3.png" shape=none]
+	subgraph cluster_VPC {
+		graph [bgcolor="#E5F5FD" fontname="Sans-Serif" fontsize=12 label=VPC labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+		subgraph "cluster_Public Subnet" {
+			graph [bgcolor="#EBF3E7" fontname="Sans-Serif" fontsize=12 label="Public Subnet" labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+			"3efc477862ea4b6495b948377f50f5b9" [label=ALB height=1.9 image="/home/participant/.cache/uv/archive-v0/kyWXeySPhS8ybWVjJsSml/lib/python3.12/site-packages/resources/aws/network/elb-application-load-balancer.png" shape=none]
+			"15c0d8273f824ab389fd4fdf7f1b487c" [label=ECS height=1.9 image="/home/participant/.cache/uv/archive-v0/kyWXeySPhS8ybWVjJsSml/lib/python3.12/site-packages/resources/aws/compute/elastic-container-service.png" shape=none]
+		}
+		subgraph "cluster_Private Subnet" {
+			graph [bgcolor="#EBF3E7" fontname="Sans-Serif" fontsize=12 label="Private Subnet" labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+			b0faafc7a95a4bd7b0246271a759607e [label="Aurora
+(MySQL)" height=2.3 image="/home/participant/.cache/uv/archive-v0/kyWXeySPhS8ybWVjJsSml/lib/python3.12/site-packages/resources/aws/database/aurora.png" shape=none]
+		}
+	}
+	"5179623ad34048918382f10e8a7da884" [label=ACM height=1.9 image="/home/participant/.cache/uv/archive-v0/kyWXeySPhS8ybWVjJsSml/lib/python3.12/site-packages/resources/aws/security/certificate-manager.png" shape=none]
+	"36ff9b4b8ebc4b7eb7646f13e37dc94e" -> "59990377393e4f32a93fa2d32ef80aa0" [label="DNS Resolution" dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"59990377393e4f32a93fa2d32ef80aa0" -> ea668ef8e5ee4bb596250f6d66b79a92 [label="Static Content" dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"59990377393e4f32a93fa2d32ef80aa0" -> "3efc477862ea4b6495b948377f50f5b9" [label="Dynamic Requests" dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"3efc477862ea4b6495b948377f50f5b9" -> "15c0d8273f824ab389fd4fdf7f1b487c" [label="Load Balance" dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"15c0d8273f824ab389fd4fdf7f1b487c" -> b0faafc7a95a4bd7b0246271a759607e [label="Database Queries" dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"5179623ad34048918382f10e8a7da884" -> "3efc477862ea4b6495b948377f50f5b9" [label="SSL Certificates" dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+}
