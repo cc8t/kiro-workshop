@@ -1,0 +1,567 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kiro Workshop - Architecture & Cost Analysis Report</title>
+    <link href="https://unpkg.com/@cloudscape-design/global-styles/index.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: "Amazon Ember", "Helvetica Neue", Roboto, Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f9f9f9;
+            line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #232f3e 0%, #131a22 100%);
+            color: white;
+            padding: 2rem 0;
+            text-align: center;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .content {
+            background: white;
+            margin: 2rem 0;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .section {
+            margin-bottom: 3rem;
+        }
+        .section h2 {
+            color: #232f3e;
+            border-bottom: 3px solid #ff9900;
+            padding-bottom: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+        .section h3 {
+            color: #0073bb;
+            margin-top: 2rem;
+        }
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        .metric-card {
+            background: #f8f9fa;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #ff9900;
+        }
+        .metric-value {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #232f3e;
+        }
+        .metric-label {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .architecture-comparison {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+        .architecture-diagram {
+            text-align: center;
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+        }
+        .architecture-diagram img {
+            max-width: 100%;
+            height: auto;
+            border-radius: 4px;
+        }
+        .cost-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 1rem 0;
+        }
+        .cost-table th,
+        .cost-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+        .cost-table th {
+            background-color: #232f3e;
+            color: white;
+        }
+        .cost-table tr:nth-child(even) {
+            background-color: #f8f9fa;
+        }
+        .status-good { color: #16794d; }
+        .status-moderate { color: #b7911b; }
+        .status-needs-improvement { color: #d13212; }
+        .recommendation-list {
+            background: #e8f4fd;
+            padding: 1.5rem;
+            border-radius: 8px;
+            border-left: 4px solid #0073bb;
+        }
+        .recommendation-list ul {
+            margin: 0;
+            padding-left: 1.5rem;
+        }
+        .recommendation-list li {
+            margin-bottom: 0.5rem;
+        }
+        .alert {
+            padding: 1rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        .alert-warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+        }
+        .alert-info {
+            background-color: #d1ecf1;
+            border: 1px solid #bee5eb;
+            color: #0c5460;
+        }
+        .component-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0;
+        }
+        .component-card {
+            background: #f8f9fa;
+            padding: 1rem;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+        .component-card h4 {
+            margin-top: 0;
+            color: #232f3e;
+        }
+        @media (max-width: 768px) {
+            .architecture-comparison {
+                grid-template-columns: 1fr;
+            }
+            .metrics-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="container">
+            <h1>Kiro Workshop - Sudoku Web Application</h1>
+            <p>Architecture & Cost Analysis Report</p>
+            <p><strong>Generated:</strong> November 18, 2025</p>
+        </div>
+    </div>
+
+    <div class="container">
+        <!-- Architecture Overview -->
+        <div class="content">
+            <div class="section">
+                <h2>Architecture Overview</h2>
+                <p>The Kiro Workshop Sudoku application is a modern, serverless web application built on AWS cloud infrastructure. It demonstrates a cost-effective, scalable architecture suitable for static web applications with global distribution requirements.</p>
+                
+                <div class="alert alert-info">
+                    <strong>Architecture Type:</strong> Serverless Static Web Application<br>
+                    <strong>Primary Services:</strong> S3, CloudFront, CloudWatch, SNS, RUM, X-Ray<br>
+                    <strong>Deployment Method:</strong> Infrastructure as Code (Terraform)
+                </div>
+
+                <h3>Current vs. Proposed Architecture</h3>
+                <div class="architecture-comparison">
+                    <div class="architecture-diagram">
+                        <h4>Current Architecture</h4>
+                        <img src="generated-diagrams/current-architecture.png" alt="Current Architecture Diagram">
+                        <p><em>Basic serverless setup with monitoring</em></p>
+                    </div>
+                    <div class="architecture-diagram">
+                        <h4>Proposed Architecture</h4>
+                        <img src="generated-diagrams/proposed-architecture.png" alt="Proposed Architecture Diagram">
+                        <p><em>Enhanced with security, backup, and CI/CD</em></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Key Metrics -->
+        <div class="content">
+            <div class="section">
+                <h2>Key Metrics</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">$4.53</div>
+                        <div class="metric-label">Monthly Cost Estimate</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">99.99%</div>
+                        <div class="metric-label">Expected Availability</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">6</div>
+                        <div class="metric-label">AWS Services Used</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">3/5</div>
+                        <div class="metric-label">Well-Architected Score</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">~50ms</div>
+                        <div class="metric-label">Global Latency (CDN)</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">1MB</div>
+                        <div class="metric-label">Total Storage Size</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Infrastructure Components -->
+        <div class="content">
+            <div class="section">
+                <h2>Infrastructure Components</h2>
+                <div class="component-grid">
+                    <div class="component-card">
+                        <h4>🪣 Amazon S3</h4>
+                        <p><strong>Purpose:</strong> Static web hosting</p>
+                        <p><strong>Configuration:</strong> Private bucket with public access blocked</p>
+                        <p><strong>Security:</strong> Origin Access Control (OAC)</p>
+                    </div>
+                    <div class="component-card">
+                        <h4>🌐 CloudFront</h4>
+                        <p><strong>Purpose:</strong> Global content delivery</p>
+                        <p><strong>Configuration:</strong> HTTPS-only, compression enabled</p>
+                        <p><strong>Cache TTL:</strong> 3600s default, 86400s max</p>
+                    </div>
+                    <div class="component-card">
+                        <h4>📊 CloudWatch</h4>
+                        <p><strong>Purpose:</strong> Monitoring and alerting</p>
+                        <p><strong>Configuration:</strong> Custom dashboard, 2 alarms</p>
+                        <p><strong>Retention:</strong> 30-day log retention</p>
+                    </div>
+                    <div class="component-card">
+                        <h4>📧 SNS</h4>
+                        <p><strong>Purpose:</strong> Email notifications</p>
+                        <p><strong>Configuration:</strong> Alert topic for monitoring</p>
+                        <p><strong>Triggers:</strong> High error rate, low traffic</p>
+                    </div>
+                    <div class="component-card">
+                        <h4>📈 CloudWatch RUM</h4>
+                        <p><strong>Purpose:</strong> Real user monitoring</p>
+                        <p><strong>Configuration:</strong> 10% sampling rate</p>
+                        <p><strong>Metrics:</strong> Performance, errors, HTTP</p>
+                    </div>
+                    <div class="component-card">
+                        <h4>🔍 AWS X-Ray</h4>
+                        <p><strong>Purpose:</strong> Performance tracing</p>
+                        <p><strong>Configuration:</strong> 10% sampling rate</p>
+                        <p><strong>Coverage:</strong> Request tracing and analysis</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Network Configuration -->
+        <div class="content">
+            <div class="section">
+                <h2>Network Configuration</h2>
+                <h3>Content Delivery Network</h3>
+                <ul>
+                    <li><strong>Global Distribution:</strong> CloudFront edge locations worldwide</li>
+                    <li><strong>Protocol:</strong> HTTPS-only with automatic HTTP redirect</li>
+                    <li><strong>Compression:</strong> Enabled for all content types</li>
+                    <li><strong>IPv6:</strong> Enabled for modern client support</li>
+                </ul>
+
+                <h3>Security Configuration</h3>
+                <ul>
+                    <li><strong>Origin Access:</strong> CloudFront Origin Access Control (OAC)</li>
+                    <li><strong>S3 Bucket Policy:</strong> Restricts access to CloudFront only</li>
+                    <li><strong>Public Access:</strong> Completely blocked at S3 level</li>
+                    <li><strong>SSL/TLS:</strong> CloudFront default certificate</li>
+                </ul>
+
+                <div class="alert alert-warning">
+                    <strong>Security Gap:</strong> Missing security headers (HSTS, CSP, X-Frame-Options) and Web Application Firewall (WAF) protection.
+                </div>
+            </div>
+        </div>
+
+        <!-- Cost Analysis -->
+        <div class="content">
+            <div class="section">
+                <h2>Cost Analysis</h2>
+                <h3>Monthly Cost Breakdown</h3>
+                <table class="cost-table">
+                    <thead>
+                        <tr>
+                            <th>Service</th>
+                            <th>Usage</th>
+                            <th>Monthly Cost</th>
+                            <th>Free Tier</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Amazon S3</td>
+                            <td>1MB storage, 10K requests</td>
+                            <td>$0.02</td>
+                            <td>✅ Covered</td>
+                        </tr>
+                        <tr>
+                            <td>Amazon CloudFront</td>
+                            <td>500MB transfer, 10K requests</td>
+                            <td>$0.50</td>
+                            <td>✅ Mostly covered</td>
+                        </tr>
+                        <tr>
+                            <td>Amazon CloudWatch</td>
+                            <td>5 metrics, 2 alarms, 1 dashboard</td>
+                            <td>$2.50</td>
+                            <td>⚠️ Partial</td>
+                        </tr>
+                        <tr>
+                            <td>Amazon SNS</td>
+                            <td>10 notifications/month</td>
+                            <td>$0.01</td>
+                            <td>✅ Covered</td>
+                        </tr>
+                        <tr>
+                            <td>CloudWatch RUM</td>
+                            <td>100K events (10% sampling)</td>
+                            <td>$1.00</td>
+                            <td>✅ Covered</td>
+                        </tr>
+                        <tr>
+                            <td>AWS X-Ray</td>
+                            <td>1K traces/month</td>
+                            <td>$0.50</td>
+                            <td>✅ Covered</td>
+                        </tr>
+                        <tr style="font-weight: bold; background-color: #e8f4fd;">
+                            <td><strong>Total</strong></td>
+                            <td><strong>Low-moderate traffic</strong></td>
+                            <td><strong>$4.53</strong></td>
+                            <td><strong>Mostly free</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <h3>Cost Scaling Projections</h3>
+                <table class="cost-table">
+                    <thead>
+                        <tr>
+                            <th>Traffic Level</th>
+                            <th>Monthly Visitors</th>
+                            <th>Estimated Cost</th>
+                            <th>Key Drivers</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Low</td>
+                            <td>1,000</td>
+                            <td>$2-4</td>
+                            <td>Free tier coverage</td>
+                        </tr>
+                        <tr>
+                            <td>Moderate</td>
+                            <td>10,000</td>
+                            <td>$4-8</td>
+                            <td>CloudWatch, RUM</td>
+                        </tr>
+                        <tr>
+                            <td>High</td>
+                            <td>100,000</td>
+                            <td>$15-25</td>
+                            <td>CloudFront, monitoring</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Well-Architected Framework Assessment -->
+        <div class="content">
+            <div class="section">
+                <h2>Well-Architected Framework Assessment</h2>
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value status-moderate">Moderate</div>
+                        <div class="metric-label">Operational Excellence</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value status-needs-improvement">Needs Improvement</div>
+                        <div class="metric-label">Security</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value status-moderate">Moderate</div>
+                        <div class="metric-label">Reliability</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value status-good">Good</div>
+                        <div class="metric-label">Performance Efficiency</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value status-good">Excellent</div>
+                        <div class="metric-label">Cost Optimization</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value status-good">Good</div>
+                        <div class="metric-label">Sustainability</div>
+                    </div>
+                </div>
+
+                <h3>Critical Security Issues</h3>
+                <div class="alert alert-warning">
+                    <ul>
+                        <li>Missing HTTP security headers (HSTS, CSP, X-Frame-Options)</li>
+                        <li>No Web Application Firewall (WAF) protection</li>
+                        <li>S3 server-side encryption not configured</li>
+                        <li>No access logging enabled</li>
+                    </ul>
+                </div>
+
+                <h3>Reliability Gaps</h3>
+                <div class="alert alert-warning">
+                    <ul>
+                        <li>No backup strategy for S3 objects</li>
+                        <li>Single region deployment</li>
+                        <li>No disaster recovery plan</li>
+                        <li>S3 versioning not enabled</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recommendations -->
+        <div class="content">
+            <div class="section">
+                <h2>Recommendations</h2>
+                
+                <h3>🔴 Critical Priority (Week 1-2)</h3>
+                <div class="recommendation-list">
+                    <ul>
+                        <li><strong>Implement CloudFront Security Headers:</strong> Add HSTS, CSP, X-Frame-Options via CloudFront Functions</li>
+                        <li><strong>Enable AWS WAF:</strong> Add web application firewall with managed rule sets</li>
+                        <li><strong>Configure S3 Encryption:</strong> Enable server-side encryption at rest</li>
+                        <li><strong>Enable Access Logging:</strong> CloudFront and S3 access logs for security monitoring</li>
+                    </ul>
+                </div>
+
+                <h3>🟡 High Priority (Week 3-4)</h3>
+                <div class="recommendation-list">
+                    <ul>
+                        <li><strong>Enable S3 Versioning:</strong> Protect against accidental deletion/modification</li>
+                        <li><strong>Cross-Region Replication:</strong> Set up backup bucket in different region</li>
+                        <li><strong>Custom Error Pages:</strong> Implement user-friendly error handling</li>
+                        <li><strong>Disaster Recovery Plan:</strong> Document recovery procedures</li>
+                    </ul>
+                </div>
+
+                <h3>🟢 Medium Priority (Week 5-8)</h3>
+                <div class="recommendation-list">
+                    <ul>
+                        <li><strong>CI/CD Pipeline:</strong> Implement GitHub Actions for automated deployment</li>
+                        <li><strong>Enhanced Monitoring:</strong> Add custom metrics and operational dashboards</li>
+                        <li><strong>Performance Optimization:</strong> Implement advanced caching strategies</li>
+                        <li><strong>Cost Monitoring:</strong> Set up AWS Budgets and cost alerts</li>
+                    </ul>
+                </div>
+
+                <h3>Implementation Impact</h3>
+                <table class="cost-table">
+                    <thead>
+                        <tr>
+                            <th>Improvement</th>
+                            <th>Additional Monthly Cost</th>
+                            <th>Security Benefit</th>
+                            <th>Reliability Benefit</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>AWS WAF</td>
+                            <td>$1-2</td>
+                            <td>High</td>
+                            <td>Medium</td>
+                        </tr>
+                        <tr>
+                            <td>Cross-Region Replication</td>
+                            <td>$0.50-1</td>
+                            <td>Low</td>
+                            <td>High</td>
+                        </tr>
+                        <tr>
+                            <td>Enhanced Logging</td>
+                            <td>$0.50</td>
+                            <td>Medium</td>
+                            <td>Medium</td>
+                        </tr>
+                        <tr>
+                            <td>Security Headers</td>
+                            <td>$0</td>
+                            <td>High</td>
+                            <td>Low</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Conclusion -->
+        <div class="content">
+            <div class="section">
+                <h2>Conclusion</h2>
+                <p>The Kiro Workshop Sudoku application demonstrates a solid foundation for a serverless web application with excellent cost optimization. The current architecture provides good performance and scalability at a very reasonable cost of approximately <strong>$4.53 per month</strong>.</p>
+
+                <div class="alert alert-info">
+                    <strong>Key Strengths:</strong>
+                    <ul>
+                        <li>Cost-effective serverless architecture leveraging AWS Free Tier</li>
+                        <li>Global content delivery via CloudFront CDN</li>
+                        <li>Comprehensive monitoring and alerting setup</li>
+                        <li>Infrastructure as Code with Terraform</li>
+                    </ul>
+                </div>
+
+                <div class="alert alert-warning">
+                    <strong>Critical Areas for Improvement:</strong>
+                    <ul>
+                        <li>Security hardening (headers, WAF, encryption)</li>
+                        <li>Backup and disaster recovery implementation</li>
+                        <li>CI/CD pipeline for operational excellence</li>
+                        <li>Enhanced monitoring and logging</li>
+                    </ul>
+                </div>
+
+                <p><strong>Recommended Next Steps:</strong></p>
+                <ol>
+                    <li>Immediately implement security headers and WAF protection</li>
+                    <li>Enable S3 versioning and cross-region replication</li>
+                    <li>Set up automated deployment pipeline</li>
+                    <li>Establish comprehensive monitoring and alerting</li>
+                </ol>
+
+                <p>With these improvements, the architecture will achieve a <strong>4-5/5 Well-Architected score</strong> while maintaining cost efficiency with an estimated additional monthly cost of only <strong>$2-5</strong>.</p>
+            </div>
+        </div>
+    </div>
+
+    <footer style="background-color: #232f3e; color: white; text-align: center; padding: 2rem; margin-top: 3rem;">
+        <p>&copy; 2025 Kiro Workshop - AWS Architecture Report | Generated with AWS Well-Architected Framework Guidelines</p>
+    </footer>
+</body>
+</html>
