@@ -1,0 +1,4 @@
+# Copy this file to terraform.tfvars and customize the values
+
+aws_region  = "us-east-1"
+bucket_name = "your-unique-sudoku-app-bucket-name"
