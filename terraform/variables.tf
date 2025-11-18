@@ -4,6 +4,12 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
+variable "backup_region" {
+  description = "AWS backup region for cross-region replication"
+  type        = string
+  default     = "us-west-2"
+}
+
 variable "bucket_name" {
   description = "Name of the S3 bucket for hosting the Sudoku app"
   type        = string

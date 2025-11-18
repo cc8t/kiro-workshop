@@ -8,7 +8,17 @@ resource "aws_cloudwatch_log_group" "sudoku_app_logs" {
   }
 }
 
-# CloudWatch Dashboard
+# CloudWatch Log Group for WAF logs
+resource "aws_cloudwatch_log_group" "waf_logs" {
+  name              = "/aws/waf/sudoku-app"
+  retention_in_days = 30
+
+  tags = {
+    Name = "Sudoku App WAF Logs"
+  }
+}
+
+# Enhanced CloudWatch Dashboard
 resource "aws_cloudwatch_dashboard" "sudoku_app_dashboard" {
   dashboard_name = "SudokuAppDashboard"
 
@@ -26,7 +36,8 @@ resource "aws_cloudwatch_dashboard" "sudoku_app_dashboard" {
             ["AWS/CloudFront", "Requests", "DistributionId", aws_cloudfront_distribution.sudoku_app.id],
             [".", "BytesDownloaded", ".", "."],
             [".", "4xxErrorRate", ".", "."],
-            [".", "5xxErrorRate", ".", "."]
+            [".", "5xxErrorRate", ".", "."],
+            [".", "CacheHitRate", ".", "."]
           ]
           view    = "timeSeries"
           stacked = false
@@ -52,6 +63,25 @@ resource "aws_cloudwatch_dashboard" "sudoku_app_dashboard" {
           region  = var.aws_region
           title   = "S3 Storage Metrics"
           period  = 86400
+        }
+      },
+      {
+        type   = "metric"
+        x      = 0
+        y      = 12
+        width  = 12
+        height = 6
+
+        properties = {
+          metrics = [
+            ["AWS/WAFV2", "AllowedRequests", "WebACL", aws_wafv2_web_acl.sudoku_app_waf.name, "Region", "CloudFront", "Rule", "ALL"],
+            [".", "BlockedRequests", ".", ".", ".", ".", ".", "."]
+          ]
+          view    = "timeSeries"
+          stacked = false
+          region  = var.aws_region
+          title   = "WAF Security Metrics"
+          period  = 300
         }
       }
     ]
@@ -98,6 +128,52 @@ resource "aws_cloudwatch_metric_alarm" "low_request_count" {
 
   tags = {
     Name = "Sudoku App Low Traffic"
+  }
+}
+
+# Security alarm for WAF blocked requests
+resource "aws_cloudwatch_metric_alarm" "waf_blocked_requests" {
+  alarm_name          = "sudoku-app-waf-blocked-requests"
+  comparison_operator = "GreaterThanThreshold"
+  evaluation_periods  = "2"
+  metric_name         = "BlockedRequests"
+  namespace           = "AWS/WAFV2"
+  period              = "300"
+  statistic           = "Sum"
+  threshold           = "10"
+  alarm_description   = "High number of blocked requests detected by WAF"
+  alarm_actions       = [aws_sns_topic.alerts.arn]
+
+  dimensions = {
+    WebACL = aws_wafv2_web_acl.sudoku_app_waf.name
+    Region = "CloudFront"
+    Rule   = "ALL"
+  }
+
+  tags = {
+    Name = "Sudoku App WAF Blocked Requests"
+  }
+}
+
+# Performance alarm for cache hit rate
+resource "aws_cloudwatch_metric_alarm" "low_cache_hit_rate" {
+  alarm_name          = "sudoku-app-low-cache-hit-rate"
+  comparison_operator = "LessThanThreshold"
+  evaluation_periods  = "3"
+  metric_name         = "CacheHitRate"
+  namespace           = "AWS/CloudFront"
+  period              = "300"
+  statistic           = "Average"
+  threshold           = "80"
+  alarm_description   = "CloudFront cache hit rate is below optimal threshold"
+  alarm_actions       = [aws_sns_topic.alerts.arn]
+
+  dimensions = {
+    DistributionId = aws_cloudfront_distribution.sudoku_app.id
+  }
+
+  tags = {
+    Name = "Sudoku App Low Cache Hit Rate"
   }
 }
 
